@@ -38,7 +38,7 @@ export class Entity {
 
         const {
             state: { movements, position },
-            props: { obstaclesEntities, goalEntity },
+            props: { dimensions, obstaclesEntities, goalEntity },
         } = this;
 
         const nextPosition = { ...position };
@@ -48,13 +48,17 @@ export class Entity {
                 nextPosition.y = Math.max(nextPosition.y - 1, 0);
             },
             DOWN() {
-                nextPosition.y = Math.min(nextPosition.y + 1, ROOM_SIZE);
+                nextPosition.y = Math.min(nextPosition.y + 1, ROOM_SIZE - dimensions.height / 2);
             },
             LEFT() {
                 nextPosition.x = Math.max(nextPosition.x - 1, 0);
             },
             RIGHT() {
-                nextPosition.x = Math.min(nextPosition.x + 1, ROOM_SIZE);
+                nextPosition.x = Math.min(nextPosition.x + 1, ROOM_SIZE - dimensions.width / 2);
+            },
+            REVERT(prevPosition) {
+                nextPosition.x = prevPosition.x;
+                nextPosition.y = prevPosition.y;
             },
         };
 
@@ -62,14 +66,14 @@ export class Entity {
 
         for (let i = 0; i < MAX_SPEED; i++) {
             Object.keys(movements).forEach(move => {
+                const previousPosition = { ...nextPosition };
+
                 updatePositionByMove[move]();
+
+                if (obstaclesEntities.some(isBlocking)) {
+                    updatePositionByMove.REVERT(previousPosition);
+                }
             });
-
-            if (obstaclesEntities.some(isBlocking)) {
-                console.log('Blocked!');
-
-                return;
-            }
 
             this.setPosition(nextPosition);
 
