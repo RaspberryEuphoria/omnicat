@@ -84,20 +84,35 @@ function createGameBoard(currentLevel) {
 
     function createWalls() {
         const wallsEntities = [];
+        const wallPerspective = [];
 
         for (let i = 0; i < 2; i++) {
-            const wallElement = createElementWithClass('div', ['entity', 'wall'], { wallId: i });
-            roomElement.appendChild(wallElement);
+            const wallElement = createElementWithClass('div', ['entity', 'wall']);
 
             wallsEntities.push(wallElement);
         }
 
-        wallsEntities[0].style.top = '322px';
-        wallsEntities[0].style.left = 0;
+        for (let i = 0; i < 2; i++) {
+            const wallElement = createElementWithClass('div', ['entity', 'wall-perspective']);
+            roomElement.appendChild(wallElement);
+            wallPerspective.push(wallElement);
+
+            console.log(wallElement);
+        }
+
+        wallsEntities[0].style.top = '325px';
+        wallsEntities[0].style.left = '-15px';
 
         wallsEntities[1].style.top = '341px';
-        wallsEntities[1].style.left = '80px';
+        wallsEntities[1].style.left = '87px';
         wallsEntities[1].classList.add('rotated');
+
+        wallPerspective[0].style.top = '317px';
+        wallPerspective[0].style.left = '-15px';
+
+        wallPerspective[1].style.top = '332px';
+        wallPerspective[1].style.left = '85px';
+        wallPerspective[1].classList.add('rotated');
 
         return wallsEntities;
     }

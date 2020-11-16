@@ -42,14 +42,13 @@ html {
 .main-character {
     top: 15px;
     left: 15px;
-    width: 30px;
+    width: 20px;
     height: 40px;
     background-image: url('./assets/img/main-character.png');
-    background-position-x: -167px;
+    background-position-x: -173px;
     background-position-y: 0;
     background-size: 500px;
     transition: top 0.3s ease, left 0.3s ease;
-    z-index: 100;
 }
 
 .doppleganger {
@@ -69,7 +68,7 @@ html {
 }
 
 .wall {
-    background: #c31f1f;
+    opacity: 0.5;
     width: 100px;
     height: 20px;
 }
@@ -77,4 +76,22 @@ html {
 .wall.rotated {
     width: 20px;
     height: 100px;
+}
+
+.wall-perspective {
+    background: #f22c2c;
+    opacity: 0.8;
+    z-index: 100;
+}
+
+.wall-perspective:not(.rotated) {
+    width: 115px;
+    height: 30px;
+    transform: perspective(10px) rotateX(-10deg);
+}
+
+.wall-perspective.rotated {
+    width: 30px;
+    height: 122px;
+    transform: perspective(10px) rotateY(-10deg);
 }
