@@ -43,6 +43,14 @@ export function getElementDimensions(element) {
     };
 }
 
+export function toggleElementVisibility(element, isVisible) {
+    if (isVisible) {
+        element.classList.remove('is-hidden');
+    } else {
+        element.classList.add('is-hidden');
+    }
+}
+
 function parsePosition(position) {
     return parseInt(position.replace('px', ''));
 }

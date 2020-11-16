@@ -52,6 +52,15 @@ html {
     z-index: 100;
 }
 
+.doppleganger {
+    display: block;
+    opacity: 0.8;
+}
+
+.entity.is-hidden {
+    display: none;
+}
+
 .goal {
     width: 30px;
     height: 30px;

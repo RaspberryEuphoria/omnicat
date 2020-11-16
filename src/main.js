@@ -1,5 +1,6 @@
 import { MOVE_CODES } from './engine/constants.js';
-import { Entity } from './engine/entity.js';
+import { Entity } from './entities/Entity.js';
+import { MainCharacterEntity } from './entities/MainCharacterEntity.js';
 import { createElementWithClass } from './utils/dom/index.js';
 
 async function init() {
@@ -26,10 +27,12 @@ function createGameBoard(currentLevel) {
     }
 
     const mainCharacterElement = createMainCharacter();
+    const dopplegangerElement = createDoppleganger();
     const goalElement = createGoal();
     const wallsElements = createWalls();
 
     roomElement.appendChild(mainCharacterElement);
+    roomElement.appendChild(dopplegangerElement);
     roomElement.appendChild(goalElement);
 
     wallsElements.forEach(wallElement => {
@@ -48,6 +51,16 @@ function createGameBoard(currentLevel) {
 
     function createMainCharacter() {
         const mainCharacterEntity = createElementWithClass('div', ['entity', 'main-character']);
+        return mainCharacterEntity;
+    }
+
+    function createDoppleganger() {
+        const mainCharacterEntity = createElementWithClass('div', [
+            'entity',
+            'main-character',
+            'doppleganger',
+        ]);
+
         return mainCharacterEntity;
     }
 
@@ -91,13 +104,19 @@ function createGameBoard(currentLevel) {
 
     return {
         currentLevel,
-        elements: { roomElement, goalElement, mainCharacterElement, wallsElements },
+        elements: {
+            roomElement,
+            goalElement,
+            mainCharacterElement,
+            wallsElements,
+            dopplegangerElement,
+        },
     };
 }
 
 function runGame(gameBoard) {
     const {
-        elements: { goalElement, wallsElements, mainCharacterElement },
+        elements: { goalElement, wallsElements, mainCharacterElement, dopplegangerElement },
     } = gameBoard;
 
     document.addEventListener('keydown', handleCharacterMovementState);
@@ -106,9 +125,16 @@ function runGame(gameBoard) {
     const goalEntity = new Entity(goalElement);
     const wallsEntities = wallsElements.map(wallElement => new Entity(wallElement));
 
-    const mainCharacterEntity = new Entity(mainCharacterElement, {
+    const roomEntities = {
         obstaclesEntities: [...wallsEntities],
         goalEntity,
+    };
+
+    const dopplegangerEntity = new Entity(dopplegangerElement, roomEntities, { isAlive: false });
+
+    const mainCharacterEntity = new MainCharacterEntity(mainCharacterElement, {
+        ...roomEntities,
+        dopplegangerEntity,
     });
 
     // function gameLoop() {
@@ -117,11 +143,17 @@ function runGame(gameBoard) {
 
     function handleCharacterMovementState({ key, type }) {
         const isActive = type === 'keydown';
+        const lowerKey = key.toLowerCase();
 
-        if (Object.prototype.hasOwnProperty.call(MOVE_CODES, key)) {
-            mainCharacterEntity.animateEntity({ key, isActive });
+        if (Object.prototype.hasOwnProperty.call(MOVE_CODES, lowerKey)) {
+            mainCharacterEntity.handleMovement({ key, isActive });
+            dopplegangerEntity.handleMovement({ key, isActive });
 
             return;
+        }
+
+        if (isActive && lowerKey === 'a') {
+            mainCharacterEntity.toggleDoppleganger();
         }
     }
 
