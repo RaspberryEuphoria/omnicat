@@ -42,12 +42,14 @@ html {
 .main-character {
     top: 15px;
     left: 15px;
-    width: 20px;
-    height: 20px;
-    background: #f1ce2e;
-    border-radius: 50%;
+    width: 30px;
+    height: 40px;
+    background-image: url('./assets/img/main-character.png');
+    background-position-x: -167px;
+    background-position-y: 0;
+    background-size: 500px;
     transition: top 0.3s ease, left 0.3s ease;
-    z-index: 100s;
+    z-index: 100;
 }
 
 .goal {
