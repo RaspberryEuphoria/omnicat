@@ -1,0 +1,81 @@
+module.exports = {
+    parser: 'babel-eslint',
+    env: {
+        es6: true,
+        browser: true,
+    },
+    extends: ['eslint:recommended', 'plugin:import/errors', 'plugin:import/warnings', 'prettier'],
+    plugins: ['prettier', 'simple-import-sort'],
+    rules: {
+        'prettier/prettier': [
+            'error',
+            {
+                bracketSpacing: true,
+                printWidth: 100,
+                singleQuote: true,
+                tabWidth: 4,
+                trailingComma: 'all',
+                jsxBracketSameLine: true,
+                useTabs: false,
+            },
+        ],
+        'import/no-extraneous-dependencies': 'off',
+        'no-unused-vars': [
+            'error',
+            { vars: 'all', args: 'after-used', ignoreRestSiblings: true, argsIgnorePattern: '^_' },
+        ],
+        'simple-import-sort/sort': [
+            'error',
+            {
+                groups: [
+                    // Side effect imports.
+                    ['^\\u0000'],
+                    // Absolute imports and other imports such as Vue-style `@/foo`.
+                    // Anything that does not start with a dot.
+                    ['^[^.]'],
+                    // Relative imports.
+                    // Anything that starts with a dot.
+                    ['^\\.'],
+                ],
+            },
+        ],
+    },
+    settings: {
+        'import/resolver': {
+            node: {
+                extensions: ['.js', '.json'],
+            },
+        },
+    },
+    overrides: [
+        {
+            files: ['*.js'],
+            extends: [
+                'eslint:recommended',
+                'plugin:import/errors',
+                'plugin:import/warnings',
+                'prettier',
+            ],
+            plugins: ['prettier'],
+            rules: {
+                'prettier/prettier': [
+                    'error',
+                    {
+                        bracketSpacing: true,
+                        printWidth: 100,
+                        singleQuote: true,
+                        tabWidth: 4,
+                        trailingComma: 'all',
+                        jsxBracketSameLine: true,
+                        useTabs: false,
+                    },
+                ],
+                'import/no-extraneous-dependencies': 'off',
+                'no-unused-vars': [
+                    'error',
+                    { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
+                ],
+            },
+        },
+    ],
+};
